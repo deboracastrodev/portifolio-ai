@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2]
+stepsCompleted: [1, 2, 3, 4]
 inputDocuments: []
 workflowType: 'research'
 lastStep: 1
@@ -353,6 +353,192 @@ mTLS (mutual TLS) é usado para autenticação baseada em certificados entre ser
 - **Embeddings:** Considerar encrypt embeddings sensíveis antes de armazenar
 
 _Source: [RAG at Scale: How to Build Production AI Systems in 2026](https://redis.io/blog/rag-at-scale/) | [Agentic AI Design Patterns (2026 Edition)](https://medium.com/@dewasheesh.rana/agentic-ai-design-patterns-2026-ed-e3a5125162c5)_
+
+---
+
+## Architectural Patterns and Design
+
+### System Architecture Patterns
+
+**Microservices para RAG:**
+
+Decomposição de sistemas RAG em microsserviços especializados é o padrão dominante para escalabilidade. Cada componente é independente: ingest service (processamento de documentos), embedding service (geração de embeddings), retrieval service (busca vetorial), generation service (invocação LLM). Services comunicam via APIs REST/gRPC ou mensageria.
+
+**Serverless RAG:**
+
+AWS Lambda, Google Cloud Functions e Azure Functions permitem arquiteturas RAG serverless. Lambda functions processam documentos, geram embeddings, e fazem retrieval sob demanda. Ideal para workloads esporádicos e custos otimizados, mas com cold starts que podem impactar latência.
+
+**Event-Driven Architecture:**
+
+Padrões event-driven são fundamentais para RAG escalável. Eventos de novos documentos disparam pipelines assíncronos (ingest → embed → index). Kafka, RabbitMQ ou Redis Streams orquestram fluxos entre componentes. Event sourcing mantém log imutável de todos os eventos para auditoria e replay.
+
+**Monolito Modular:**
+
+Para MVPs e implementações iniciais, monolito modular é recomendado. Módulos bem definidos (ingest, embed, retrieve, generate) com interfaces claras facilitam evolução futura para microsserviços quando necessário.
+
+**GraphRAG:**
+
+Arquitetura emergente que combina RAG com grafos de conhecimento. Entities e relationships são extraídas de documentos, criando grafo que melhora reasoning e recuperação multi-hop. Weaviate e Neo4j podem ser combinados para implementar GraphRAG.
+
+_Source: [Microservice Design Patterns for RAG Components](https://apxml.com/courses/large-scale-distributed-rag/chapter-5-orchestration-operationalization-large-scale-rag/microservice-design-rag-components) | [Designing Serverless AI Architectures](https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-serverless/designing-serverless-ai-architectures.html) | [Serverless Architecture Patterns: Event-Driven Microservices on AWS](https://medium.com/@ayushnangia16/serverless-architecture-patterns-event-driven-microservices-on-aws-92ad9a835758) | [Event-Driven Architecture in Generative AI](https://eventmesh.apache.org/docs/next/application-scenario/generative-AI/)_
+
+### Design Principles and Best Practices
+
+**Clean Architecture para RAG:**
+
+Clean Architecture com 4 camadas (Domain, Application, Infrastructure, Presentation) é ideal para sistemas RAG maintainables. Domain layer contém entidades de negócio (Document, Chunk, Embedding). Application layer orquestra use cases RAG. Infrastructure layer implementa integrações com vector DBs e LLMs. Presentation layer expõe APIs.
+
+**Domain-Driven Design (DDD):**
+
+DDD ajuda a modelar domínios complexos em sistemas RAG. Bounded contexts separam responsabilidades (Document Management, Vector Search, LLM Orchestration). Ubiquitous language facilita comunicação técnica. Repositories abstraem acesso a dados (vector DB, document store).
+
+**SOLID Principles:**
+
+- **Single Responsibility:** Cada componente RAG tem uma responsabilidade (ingest, embed, retrieve)
+- **Open/Closed:** Frameworks RAG (LangChain, LlamaIndex) são extensíveis via plugins
+- **Liskov Substitution:** Diferentes embedding models podem ser substituídos sem alterar código
+- **Interface Segregation:** Interfaces específicas para retrieval, generation, evaluation
+- **Dependency Inversion:** Application layer depende de abstrações, não implementações concretas
+
+**Hexagonal Architecture:**
+
+Ports and adapters pattern isolam core RAG logic de infraestrutura. Ports definem interfaces (EmbeddingPort, RetrievalPort, LLMPort). Adapters implementam integrações (OpenAIAdapter, PineconeAdapter, LangChainAdapter). Facilita testes e troca de providers.
+
+_Source: [Building Cloud-Agnostic GenAI Frameworks with Clean Architecture](https://medium.com/@alejandro.r.amaro/building-cloud-agnostic-genai-frameworks-with-clean-architecture-principles-0cd3920b7547) | [Advanced RAG: Architecture, Techniques, Applications](https://www.leewayhertz.com/advanced-rag/) | [Clean Architecture and DDD Template](https://github.com/mikolaj-jankowski/Clean-Architecture-And-Domain-Driven-Design-Solution-Template)_
+
+### Scalability and Performance Patterns
+
+**Horizontal vs Vertical Scaling:**
+
+Horizontal scaling (adicionar mais instâncias) é predominante em RAG. Vector databases (Pinecone, Weaviate) escalam horizontalmente. Embedding services podem ser stateless e escalar via containers. Vertical scaling (maiores máquinas) é usado para componentes stateful como LLM serving.
+
+**Load Balancing:**
+
+Load balancers distribuem requests RAG entre múltiplas instâncias. Round-robin para stateless services, least-connections para LLM servers. Application load balancers (AWS ALB, GCP LB) roteiam inteligentemente baseado em health checks.
+
+**Caching Strategies:**
+
+- **Semantic Caching:** Cache de queries RAG baseado em similaridade semântica. Queries similares retornam cached responses.
+- **Document Cache:** Documentos processados e embeddings em cache (Redis) para evitar re-computação.
+- **LLM Response Cache:** Respostas LLM cacheadas por hash de prompt + contexto.
+- **CDN Caching:** Documentos estáticos servidos via CDN para baixa latência.
+
+**Distributed Systems Patterns:**
+
+- **Consistent Hashing:** Distribui embeddings entre nodes de vector DB de forma balanceada.
+- **Quorum Reads/Writes:** Garante consistência em vector DBs distribuídos.
+- **Retry with Exponential Backoff:** Retry de chamadas LLM e vector DB com backoff exponencial.
+- **Rate Limiting:** Protege APIs RAG de overload e controla custos LLM.
+
+**Performance Optimization:**
+
+- **Chunking Strategies:** Documentos chunkados inteligentemente (tamanho, overlap) para melhor retrieval.
+- **Hybrid Search:** Combina busca vetorial (semântica) com keyword (BM25) para melhores resultados.
+- **Query Expansion:** Expande queries com sinônimos e termos relacionados para melhor recall.
+- **Parallel Retrieval:** Busca paralela em múltiplos vector DBs ou índices para reduzir latência.
+
+_Source: [Optimizing Performance and Reliability for Enterprise-Scale RAG GenAI Systems](https://medium.com/@wmechem/optimizing-performance-and-reliability-for-enterprise-scale-rag-genai-systems-0eb59b2e1b04) | [Production RAG Architecture: Scaling Considerations](https://apxml.com/courses/optimizing-rag-for-production/chapter-1-production-rag-foundations/production-rag-architecture-scaling) | [Navigating RAG System Architecture: Trade-offs and Best Practices](https://dev.to/satyam_chourasiya_99ea2e4/navigating-rag-system-architecture-trade-offs-and-best-practices-for-scalable-reliable-ai-3ppm) | [Best Practices for Production-Scale RAG Systems](https://orkes.io/blog/rag-best-practices/)_
+
+### Integration and Communication Patterns
+
+**Multi-Agent RAG Architecture:**
+
+Multi-agent RAG é o padrão state-of-the-art para 2026. Agentes especializados colaboram: Retriever Agent (busca contextos), Ranker Agent (rerorna resultados), Critic Agent (valida qualidade), Synthesizer Agent (gera resposta final). LangGraph e AutoGen são frameworks predominantes para orquestrar multi-agent RAG.
+
+**API Gateway Pattern:**
+
+API Gateway centraliza acesso a serviços RAG. Rou requests entre ingest, embedding, retrieval, generation services. Implementa autenticação, rate limiting, caching, e monitoring. Kong, AWS API Gateway, ou custom gateway em Node.js/Go.
+
+**Service Mesh:**
+
+Istio ou Linkerd para service-to-service communication em ambientes Kubernetes RAG. mTLS automático, observabilidade (tracing, metrics), traffic management (canary deployments, blue-green), e resiliência (timeouts, retries) sem mudar código.
+
+**Event Sourcing + CQRS:**
+
+Event sourcing armazena todos os eventos do pipeline RAG (document added, embedded, indexed). CQRS separa leituras (retrieval RAG) de escritas (indexação assíncrona). Reads usam vector DB otimizado, writes usam fila Kafka + processadores.
+
+_Source: [Agentic-RAG using AutoGen and LangChain LangGraph](https://medium.com/@shradhacea/agentic-rag-using-autogen-and-langchain-langgraph-framework-89ac2d684702) | [CrewAI vs LangGraph vs AutoGen: Choosing the Right Framework](https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-autogen) | [LangGraph vs AutoGen: LLM Workflow Frameworks Comparison](https://www.zenml.io/blog/langgraph-vs-autogen) | [LangGraph: Multi-Agent Workflows](https://www.blog.langchain.com/langgraph-multi-agent-workflows/) | [Mastering Agentic Design Patterns with LangGraph](https://pub.towardsai.net/mastering-agentic-design-patterns-with-langgraph-a-complete-guide-to-building-intelligent-ai-71158077a096)_
+
+### Security Architecture Patterns
+
+**Zero Trust Architecture:**
+
+Zero Trust é aplicado a sistemas RAG — cada request é autenticado e autorizado, independentemente da origem. mTLS entre serviços, OAuth 2.0/JWT para APIs, e permissões granulares por recurso (documentos, collections, queries).
+
+**Data Encryption:**
+
+- **In-Transit:** TLS 1.3 obrigatório para todas comunicações
+- **At-Rest:** AES-256 encryption em vector databases e document stores
+- **Embedding Encryption:** Considerar encrypt embeddings sensíveis antes de armazenar
+- **Key Management:** KMS (AWS KMS, GCP KMS, Azure Key Vault) para gerenciar encryption keys
+
+**PII Redaction:**
+
+PII (Personally Identifiable Information) deve ser redacted de documentos antes de gerar embeddings. PII detection models (Microsoft Presidio, Google DLP) identificam e mascaram dados sensíveis.
+
+**Prompt Injection Protection:**
+
+Sistemas RAG devem validar e sanitizar inputs para prevenir prompt injection. Input filtering, output validation, e rate limiting protegem contra ataques adversariais.
+
+**Audit Logging:**
+
+Todos os acessos a documentos e queries RAG devem ser logados para auditoria. Logs incluem user, timestamp, query, documentos acessados, e resultados. Logs imutáveis via append-only storage.
+
+_Source: [RAG at Scale: How to Build Production AI Systems in 2026](https://redis.io/blog/rag-at-scale/) | [Agentic AI Design Patterns (2026 Edition)](https://medium.com/@dewasheesh.rana/agentic-ai-design-patterns-2026-ed-e3a5125162c5) | [Best Practices for Scaling Complex Multi-User Enterprise RAG AI Systems](https://medium.com/@wmechem/best-practices-for-scaling-complex-multi-user-enterprise-rag-ai-systems-a-comprehensive-guide-to-8754c998c7b9)_
+
+### Data Architecture Patterns
+
+**Data Ingestion Pipeline:**
+
+Pipeline de ingestão multi-stage: (1) Document extraction (PDF, DOCX, web crawlers), (2) Text cleaning e normalization, (3) Chunking estratégico, (4) Embedding generation, (5) Vector indexing. Pipeline assíncrono com filas (Kafka, SQS) para escalabilidade.
+
+**Vector Database Architecture:**
+
+Vector databases armazenam embeddings com metadados para busca semântica. HNSW (Hierarchical Navigable Small World) é o algoritmo predominante para approximate nearest neighbor search. Sharding e replicação distribuem dados e escalam horizontalmente.
+
+**Document Store Architecture:**
+
+Documentos originais são armazenados separadamente dos embeddings (S3, GCS, Azure Blob). Document stores (MongoDB, PostgreSQL) mantêm metadados, status de processamento, e referências aos embeddings. Separação permite otimização independente.
+
+**Hybrid Search Architecture:**
+
+Hybrid search combina busca vetorial (semântica) com keyword search (BM25, TF-IDF). Dense retriever (vector search) e sparse retriever (keyword search) são combinados via reranking (Cross-Encoder, RRF). Reciprocal Rank Fusion (RRF) ou learning-to-rank models fundem resultados.
+
+**Data Freshness Patterns:**
+
+- **Real-time Indexing:** Documentos são indexados em tempo real via event streaming
+- **Batch Indexing:** Processamento batch para grandes volumes de documentos (nightly)
+- **Incremental Updates:** Apenas deltas (novos/alterados) são re-embedded
+- **TTL-based Expiration:** Embeddings expiram após período para garantir frescor
+
+_Source: [RAG Systems: Best Practices to Master Evaluation](https://cloud.google.com/blog/products/ai-machine-learning/optimizing-rag-retrieval) | [RAGOps Guide: Building and Scaling Retrieval Augmented Generation Systems](https://towardsdatascience.com/ragops-guide-building-and-scaling-retrieval-augmented-generation-systems-3d26b3ebd627/) | [Mastering RAG: How To Architect An Enterprise RAG System](https://galileo.ai/blog/mastering-rag-how-to-architect-an-enterprise-rag-system) | [How to Build a RAG System That Actually Works](https://www.analyticsvidhya.com/blog/2025/03/why-rag-systems-fail-and-how-to-fix-them/)_
+
+### Deployment and Operations Architecture
+
+**Container Orchestration:**
+
+Kubernetes é padrão para orquestrar containers RAG em produção. Helm charts definem deployments, services, configmaps, e secrets. Horizontal Pod Autoscaler (HPA) escala pods baseado em CPU/memory/custom metrics. Istio service mesh adiciona observabilidade e security.
+
+**Infrastructure as Code (IaC):**
+
+Terraform, AWS CDK, ou Pulumi definem infraestrutura RAG como código. Version control, peer review, e automated testing aplicam à infraestrutura. Changes são reproducíveis e reversíveis.
+
+**GitOps:**
+
+GitOps usa Git como source of truth para estado do cluster RAG. ArgoCD ou Flux sincronizam manifestos Git com cluster. Pull requests aplicam governance e approval workflows. Automated rollback em caso de falhas.
+
+**Observability Stack:**
+
+- **Metrics:** Prometheus + Grafana para métricas de throughput, latência, errors
+- **Logging:** ELK Stack (Elasticsearch, Logstash, Kibana) ou Loki para logs centralizados
+- **Tracing:** Jaeger ou OpenTelemetry para distributed tracing entre serviços RAG
+- **RAG-specific Metrics:** Retrieval accuracy, LLM latency, end-to-end latency
+
+**CI/CD for RAG:**
+
+GitHub Actions, GitLab CI, ou Jenkins automatizam build, test, e deploy de sistemas RAG. Testes específicos incluem embedding quality tests, retrieval accuracy tests, e LLM output validation. Blue-green deployments reduzem risco de releases.
+
+_Source: [Designing Serverless AI Architectures](https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-serverless/designing-serverless-ai-architectures.html) | [Event-Driven Architecture Fundamentals](https://www.confluent.io/learn/event-driven-architecture/) | [Architectural Considerations for Event-Driven Microservices](https://developer.ibm.com/articles/eda-and-microservices-architecture-best-practices/)_
 
 ---
 
