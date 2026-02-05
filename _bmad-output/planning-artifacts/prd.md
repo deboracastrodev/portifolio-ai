@@ -427,6 +427,20 @@ Vaga → Parser → Agentes analisam → Plano de Estudo ─→ [OU] Pair Progra
 
 **Rejected:** Redux Toolkit (more boilerplate, larger bundle)
 
+#### ADR-007: Backend Debate State Management
+
+| Aspect | Decision | Trade-off |
+|--------|----------|-----------|
+| **Pattern** | Finite State Machine (FSM) | Implementation complexity vs Robust flow control |
+| **Tooling** | XState or custom FSM logic (Node.js) | Structured agent transitions |
+| **Persistence** | PostgreSQL (History) + Redis (Hot State) | Latency vs Data durability |
+
+**Reason:** 8 agents require deterministic transitions. FSM prevents illegal states in the "Debate Protocol" and allows seamless session recovery if connection drops.
+
+**Decision:** Zustand (client) + React Query (server)
+
+**Rejected:** Redux Toolkit (more boilerplate, larger bundle)
+
 ---
 
 ### Technical Architecture Stack
@@ -452,8 +466,8 @@ backend:
     growth: LLaMA 3 70B local (Ollama + LocalAI)
     router: Cost-aware routing
   vector_db:
-    primary: pgvector + PostgreSQL 15
-    cache: Redis (embeddings hot)
+    primary: pgvector + PostgreSQL 15 (Skills & Debate History)
+    cache: Redis (Embeddings hot & Active Debate State)
 
 infrastructure:
   cdn: Cloudflare/Vercel Edge (static assets)
@@ -478,6 +492,18 @@ infrastructure:
 **Non-Supported:** Internet Explorer, Chrome <90, Firefox <85, Safari <15 (mensagem de upgrade)
 
 ---
+
+### UX Design ### Responsive Design Interaction Patterns
+
+#### The "Thinking Stream" Timeline (Primary Interaction)
+
+To manage LLM latency and provide high perceived performance, the core interaction pattern is a **Streaming Activity Timeline**.
+
+- **Visual Mechanics:** Vertical timeline where agents appear sequentially as they process.
+- **Streaming Feedback:** Text is rendered using a "typing" effect (SSE) to show active work.
+- **Agent Identity:** Each entry is branded with the Agent's icon and name (e.g., "🏗️ Winston (Architect) is evaluating...").
+- **Transparency:** "Carlos Journey" is satisfied via an expandable "View Debate" toggle on each timeline item to show raw agent-to-agent reasoning.
+- **Progressive Disclosure:** Skills and plans are "distilled" into the sidebar as soon as consensus is reached in the stream.
 
 ### Responsive Design
 
