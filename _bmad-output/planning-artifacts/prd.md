@@ -1,5 +1,5 @@
 ---
-stepsCompleted: ["step-01-init", "step-02-discovery", "step-03-success", "step-04-journeys", "step-05-domain", "step-06-innovation", "step-07-project-type", "step-08-scoping", "step-09-functional"]
+stepsCompleted: ["step-01-init", "step-02-discovery", "step-03-success", "step-04-journeys", "step-05-domain", "step-06-innovation", "step-07-project-type", "step-08-scoping", "step-09-functional", "step-10-roadmap", "step-11-finalization"]
 inputDocuments: ["docs/brainstorming.md", "_bmad-output/planning-artifacts/research/tecnologias-rag-conhecimento-tecnico-research-2026-02-04.md"]
 workflowType: 'prd'
 documentCounts:
@@ -169,7 +169,7 @@ Vaga → Parser → Agentes analisam → Plano de Estudo ─→ [OU] Pair Progra
 3. **Auto-avaliação Dinâmica:** Lista gerada baseada nas skills encontradas nas vagas
 4. **Matriz de Intersecção:** Gap analysis mostrando skills mais solicitadas (80%+) vs o que ela sabe
 5. **Pair Programming:** Sessão para construir case sugerido (TODO app com Zustand + Vitest)
-6. **Evolução:** Radar chart atualizado mostrando progresso
+6. **Evolução:** Radar chart updated mostrando progresso
 
 **Momento AHA!:** Durante pair programming, agente Critic aponta gap real: *"Você esqueceu de tratar o loading state."* Julia pensa: *"Caramba, isso acontece na prática! Tô aprendendo de verdade."*
 
@@ -269,12 +269,12 @@ Vaga → Parser → Agentes analisam → Plano de Estudo ─→ [OU] Pair Progra
 - **O que é:** IA que analisa tendências de mercado e direciona preparação de carreira em tempo real
 - **Inovação:** Carreira orientada por DADOS, não por "achismo" ou tendências passageiras
 - **Diferencial:** Vagas são analisadas continuamente → currículo evolui proativamente antecipando demanda
-- **Paradigma shift:** De "reagir a vagas" para "antecipar oportunidades de carreira"
+- **Paradigma shift:** De "reagir a vagas" para "anticipar oportunidades de carreira"
 - **Validação:** Parser + RAG identificam skills emergentes antes que se tornem mainstream
 
 **2. Sistema de Métricas com Learning Loop (Cases de Sucesso/Erro da Comunidade)**
 - **O que é:** Aprender com casos reais de sucesso e erro da comunidade de usuários
-- **Inovação:** Crowdsourced learning - todos contribuem para a inteligência coletiva
+- **Inovação:** Crowdsourced learning - todos contribuem para the inteligência coletiva
 - **Diferencial:** Não é só "seu progresso isolado", é "aprendizado da comunidade evolui o produto"
 - **Paradigma shift:** De "learning isolado e egoísta" para "knowledge graph coletivo"
 - **Validação:** Metrics dashboard mostra evolução comunitária + individual
@@ -487,12 +487,13 @@ infrastructure:
 |-------------|---------|--------|----------|
 | **Mobile** | < 640px | Single column | Navigation drawer, simplified dashboard |
 | **Tablet** | 640px - 1024px | Adaptive | Dashboard otimizado, split view |
-| **Desktop** | > 1024px | Multi-column | Full dashboard, multi-pane pair programming |
+| **Desktop** | > 1024px | Multi-column | Full dashboard, multi-pane pair programming (Primary Experience) |
 
-**Touch-Optimized:**
+**Touch-Optimized & Constraints:**
 - Botões mínimos 44x44px
 - Gestures swipe para navegação mobile
 - Pull-to-refresh em listas
+- **Nota:** Funcionalidades de escrita de código (Pair Programming) são otimizadas para Desktop. No Mobile, estas sessões serão "Read-Only" ou limitadas a revisões rápidas.
 
 ---
 
@@ -952,3 +953,95 @@ Cache Targets:
 - FR34: Usuário pode compartilhar sua experiência e resultados com a comunidade
 - FR35: Sistema pode calcular e apresentar taxa de sucesso comparada à média do mercado
 
+---
+
+## Non-Functional Requirements
+
+### 1. Performance
+- **NFR1:** Tempo de resposta do Parser (vaga única) deve ser < 500ms (p50) usando indexação HNSW.
+- **NFR2:** O primeiro resultado dos agentes deve ser transmitido (streamed) em < 1s (p50) via SSE.
+- **NFR3:** Core Web Vitals: LCP < 1.5s e TTI < 2s para garantir UX fluida.
+- **NFR4:** Suportar até 100 usuários simultâneos no MVP sem degradação perceptível.
+
+### 2. Scalability
+- **NFR5:** Arquitetura deve permitir escalonamento horizontal do backend e dos workers de IA.
+- **NFR6:** pgvector deve manter latência de busca < 500ms mesmo com crescimento para 1M+ de registros de skills.
+
+### 3. Security & Privacy
+- **NFR7:** Dados em trânsito via TLS 1.3 e em repouso via AES-256.
+- **NFR8:** Conformidade total com **LGPD/GDPR** para tratamento de dados de currículo e perfil.
+- **NFR9:** Implementar Rate Limiting por usuário/IP para proteger custos de API de LLM.
+- **NFR10:** Sanitização de inputs para prevenir XSS e SQL Injection em campos de upload.
+
+### 4. Availability & Reliability
+- **NFR11:** Disponibilidade mínima de 99.5% para o core do Dashboard.
+- **NFR12:** **IA Labeling:** Todo conteúdo gerado por agentes deve ser explicitamente identificado como tal.
+- **NFR13:** Fallback gracioso para erros de LLM ou timeout de agentes, mantendo a sessão do usuário ativa.
+
+### 5. Observability
+- **NFR14:** Tracing distribuído para monitorar o tempo de resposta individual de cada um dos 8 agentes.
+- **NFR15:** Centralização de logs (Sentry/LogRocket) para depuração de alucinações reportadas por usuários.
+
+### 6. Usability & Accessibility
+- **NFR16:** Conformidade com **WCAG 2.1 Level AA** (essencial para acessibilidade).
+- **NFR17:** Responsividade total (Mobile-First) garantindo funcionalidade em telas a partir de 360px.
+
+---
+
+## 12-Week Roadmap (MVP Launch)
+
+### Phase 1: Foundation & Infrastructure (Weeks 1-2)
+- **Goal:** Estabilizar o ambiente de desenvolvimento e a arquitetura base.
+- **Tasks:**
+  - Setup do projeto Next.js + Node.js (TypeScript).
+  - Configuração do PostgreSQL + pgvector.
+  - Implementação de Autenticação (NextAuth/Clerk).
+  - UI Boilerplate: Layout do Dashboard, Sidebar e Tematização.
+
+### Phase 2: Ingestion & Parser (Weeks 3-4)
+- **Goal:** Transformar descrições de vagas em dados estruturados.
+- **Tasks:**
+  - Implementação do Parser de Vagas (Agent 1).
+  - Pipeline de Embeddings (OpenAI -> pgvector).
+  - Interface de Upload (.md, .txt, links).
+  - Histórico de buscas do usuário.
+
+### Phase 3: AI Brain & Multi-Agent Protocol (Weeks 5-7)
+- **Goal:** O diferencial competitivo — debate entre os 8 agentes.
+- **Tasks:**
+  - Desenvolvimento individual dos 7 agentes restantes (Researcher, Coder, etc.).
+  - Implementação do Protocolo de Debate (Redução de alucinações).
+  - Setup de Streaming de Respostas (Server-Sent Events).
+  - RAG Pipeline para contexto de carreira.
+
+### Phase 4: Career Intelligence & Gap Analysis (Weeks 8-9)
+- **Goal:** Entregar o valor real — o que estudar e como crescer.
+- **Tasks:**
+  - Sistema de Auto-avaliação dinâmica.
+  - Matriz de Intersecção (Gap Analysis).
+  - Geração automática de Planos de Estudo e Sugestão de Portfolio.
+  - Visualizações: Radar Charts e Progress Trackers.
+
+### Phase 5: Interactive Experience & Gamification (Weeks 10-11)
+- **Goal:** Engajamento e validação técnica real.
+- **Tasks:**
+  - Módulo de Pair Programming (WebSocket/Socket.io).
+  - Sistema de Feedback em tempo real durante o código.
+  - Gamificação: Streaks, XP e Levels.
+  - Dashboard de Métricas de Carreira.
+
+### Phase 6: Polish & Launch (Week 12)
+- **Goal:** Estabilidade, performance e abertura para usuários.
+- **Tasks:**
+  - Otimização de performance (HNSW index, Caching).
+  - Testes de Usabilidade com usuários reais (Beta fechado).
+  - Ajustes finais baseados no feedback do "Carlos" (Sênior cético).
+  - Deploy em Produção (Vercel/Railway).
+
+---
+
+## Conclusion & Next Steps
+
+Com este PRD finalizado, o **portifolio-ai (DevMentor AI)** possui uma base sólida, validada por dados de mercado e jornadas de usuário reais. O foco agora deve ser a **execução técnica**, começando pela fundação e pelo Parser de Vagas, que é o gatilho de todo o ecossistema.
+
+**Próxima ação recomendada:** Iniciar o processo de **Solutioning** para transformar esses requisitos em Epics e Stories detalhadas.
