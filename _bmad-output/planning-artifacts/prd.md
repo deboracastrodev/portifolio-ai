@@ -1,5 +1,5 @@
 ---
-stepsCompleted: ["step-01-init", "step-02-discovery", "step-03-success", "step-04-journeys", "step-05-domain", "step-06-innovation", "step-07-project-type", "step-08-scoping"]
+stepsCompleted: ["step-01-init", "step-02-discovery", "step-03-success", "step-04-journeys", "step-05-domain", "step-06-innovation", "step-07-project-type", "step-08-scoping", "step-09-functional"]
 inputDocuments: ["docs/brainstorming.md", "_bmad-output/planning-artifacts/research/tecnologias-rag-conhecimento-tecnico-research-2026-02-04.md"]
 workflowType: 'prd'
 documentCounts:
@@ -677,4 +677,278 @@ Cache Targets:
 | **Latency - Agents** | Primeiro resultado | **<1s p50** | Streaming starts immediately |
 | **Latency - Complete** | Todos agentes | **<3s p95** | All agents + debate done |
 | **Core Web Vitals** | LCP/FID/CLS | "Good" threshold | UX aceitável |
+
+---
+
+## Project Scoping & Phased Development
+
+### MVP Strategy & Philosophy
+
+**MVP Approach:** Problem-Solving + Experience MVP
+
+**Filosofia:** Focar em resolver a dor principal (análise de vagas + direção de carreira) com uma experiência que seja agradável o suficiente para早期 adotantes continuarem usando.
+
+**Justificativa:**
+- **Problem-Solving:** Sem parser funcional e análise de gaps, não existe produto
+- **Experience:** Sem dashboard intuitivo e pair programming funcional, usuários não engajam
+- **Não é Platform MVP:** Admin e support journeys podem esperar até ter usuários reais
+- **Não é Revenue MVP:** Fase de validação primeiro, monetização depois
+
+**Resource Requirements (MVP):**
+- **Time Size:** 2-3 developers
+- **Skills Needed:**
+  - 1 Frontend Developer (React/Next.js, TypeScript)
+  - 1 Backend Developer (Node.js/Python, LLM integration)
+  - 1 Full-Stack Developer (arquitetura, infraestrutura)
+- **Timeline Estimado:** 3-4 meses para MVP funcional
+
+---
+
+### MVP Feature Set (Phase 1)
+
+**Objetivo:** Provar que devs usam e acham útil
+
+**Core User Journeys Supported:**
+- ✅ **Julia (Dev Júnior)** - Happy path completo
+- ✅ **Carlos (Dev Sênior)** - O cético convertido
+
+**Must-Have Capabilities:**
+
+| Capability | Why Must-Have? | Cannot Be Manual |
+|------------|----------------|-------------------|
+| **Parser de Vagas** | Input inicial - sem isso não existe | ❌ Não |
+| **8 Agentes + Debate Protocol** | Diferencial competitivo | ❌ Não |
+| **Auto-avaliação Dinâmica** | Base para gap analysis | ❌ Não |
+| **Matriz de Intersecção** | Core value proposition | ❌ Não |
+| **Planos de Estudo/Portfolio** | Output principal | ❌ Não |
+| **Dashboard Visual Básico** | Visualizar progresso | ⚠️ Simples (evoluí depois) |
+| **Pair Programming** | Disponível (opcional para usuário) | ❌ Já é opcional |
+
+**Excluded from MVP:**
+- ❌ Admin Dashboard (Pat's journey) - Phase 2
+- ❌ Support/Troubleshooting (Sam's journey) - Phase 2
+- ❌ Comunidade features - Phase 3
+- ❌ Recrutador portal - Phase 3
+- ❌ CLI tool - Phase 3/Future
+
+**Success Metrics for MVP:**
+- 50-100 usuários ativos
+- ≥70% analisam ≥5 vagas
+- ≥40% retenção 7 dias
+- ≥20% dizem "obtive valor"
+- Parser ≥80% acurácia
+
+---
+
+### Post-MVP Features (Phase 2 - Growth)
+
+**Objetivo:** Provar que o produto gera resultados
+
+**Additional User Journeys:**
+- ✅ **Pat (Admin)** - Operações e monitoramento
+- ✅ **Sam (Support)** - Troubleshooting
+
+**New Capabilities:**
+
+| Feature | Why Phase 2? | Dependency |
+|---------|--------------|------------|
+| **Dashboard Admin** | Precisa usuários para monitorar | Phase 1 success |
+| **Sistema de Tickets/Support** | Precisa problemas reais para resolver | Phase 1 success |
+| **Re-run Parser** | Usuários solicitam ajustes | Phase 1 feedback |
+| **Ajustes de Configuração** | Otimizar parser com dados reais | Phase 1 data |
+| **Histórico de Sessões** | Contexto para support | Phase 1 usage |
+| **Cases de Sucesso Documentados** | Social proof para growth | Phase 1 results |
+| **Métricas de Engajamento Avançadas** | Otimizar com dados reais | Phase 1 analytics |
+| **Migração OpenAI → LLaMA local** | Otimizar custos em scale | Phase 1 validation |
+
+**Success Metrics for Phase 2:**
+- 5-10 devs conseguiram emprego através de DevMentor
+- Taxa de sucesso acima da média (3-5% vs 1-2%)
+- NPS ≥40 (recomendação espontânea)
+- Custo por usuário reduzido (open-source LLM)
+
+---
+
+### Expansion Features (Phase 3 - Vision)
+
+**Objetivo:** Tornar-se referência em carreira tech
+
+**Additional User Journeys:**
+- ✅ **Recrutadores** - Buscando candidatos validados
+- ✅ **Comunidade** - Devs trocando experiências
+
+**New Capabilities:**
+
+| Feature | Why Phase 3? | Dependency |
+|---------|--------------|------------|
+| **Comunidade DevMentor** | Requer massa crítica | Phase 2 success |
+| **Fórum/Troca de Experiências** | Conteúdo gerado por usuários | Phase 2 community |
+| **Recrutadores Buscando** | Requer base de candidatos validados | Phase 2 success cases |
+| **API para Integrações** | Parcerias e ecossistema | Phase 2 stability |
+| **CLI Tool (v2.0+)** | Power users, automação | Phase 2 product maturity |
+| **Certificações DevMentor** | Credibilidade no mercado | Phase 2 validation |
+| **Enterprise Features** | B2B expansion | B2C validation |
+
+**Success Metrics for Phase 3:**
+- "Quer crescer? Usa DevMentor" (brand recognition)
+- Recrutadores usando ativamente para contratar
+- Word-of-mouth orgânico (50%+ novo crescimento)
+- Enterprise paying customers
+
+---
+
+### Risk Mitigation Strategy
+
+#### Technical Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|--------------|--------|------------|
+| **LLM alucinações** | Alta | Crítico | Debate protocol entre agentes + validação humana no pair programming |
+| **Parser impreciso (<80%)** | Média | Alto | HNSW index + dataset de validação + fine-tuning |
+| **Latência muito alta** | Média | Alto | Streaming results + Redis cache + otimizações |
+| **pgvector não escala** | Baixa | Médio | Arquitetura já considera scale horizontal |
+| **WebSocket instability** | Média | Médio | Fallback para polling + reconnection logic |
+
+#### Market Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|--------------|--------|------------|
+| **Devs não confiam na IA** | Alta | Crítico | Debate protocol visível (Carlos journey prova valor) |
+| **Ceticismo sobre qualidade** | Alta | Alto | Pair programming com avaliação real (não só auto) |
+| **Concorrência copia** | Média | Médio | Open-source first + comunidade forte = moat defensivo |
+| **Usuários não retornam** | Média | Alto | Gamificação (streaks, XP) + métricas tangíveis |
+| **Mercado muda rápido** | Média | Médio | Análise contínua de vagas → sistema se adapta |
+
+#### Resource Risks
+
+| Risk | Probability | Impact | Mitigation |
+|------|--------------|--------|------------|
+| **Time menor que o esperado** | Média | Alto | MVP focado em features essenciais (já definido) |
+| **Orçamento LLM esgota** | Alta | Alto | Open-source first: OpenAI MVP → LLaMA Phase 2 |
+| **Dev skill gap** | Média | Médio | Tech stack mainstream (React/Node) + documentação |
+| **Infraestrutura falha** | Baixa | Alto | Monitoring + alerts + graceful degradation |
+
+### Risk-Based Scope Decisions
+
+**Simplifications for MVP:**
+1. **Admin/Support journeys movidas para Phase 2** - Reduz escopo inicial em ~30%
+2. **OpenAI-only (MVP)** - Evita complexidade de LLM local inicialmente
+3. **Dashboard básico** - Evoluções visuais podem esperar
+4. **Single language (Português)** - I18n pode vir depois
+
+**Contingency Plans:**
+- **Se time = 2 devs:** Remover pair programming do MVP, adicionar Phase 2
+- **Se orçamento limitado:** Começar com OpenAI apenas (mais caro mas mais simples)
+- **Se parser <80% acurácia:** Manual curation + fine-tuning antes de escalar
+
+---
+
+### Development Dependencies
+
+**Critical Path (MVP):**
+
+```
+1. Parser Agent (input inicial)
+   ↓
+2. 8 Agents + Debate (core value)
+   ↓
+3. Auto-avaliação + Matriz (gap analysis)
+   ↓
+4. Dashboard Básico (UX)
+   ↓
+5. Pair Programming (opcional mas disponível)
+```
+
+**Parallel Development Opportunities:**
+- Frontend (Dashboard) pode ser desenvolvido em paralelo com Backend Agents
+- Landing page (SSR) pode ser feita antes do app autenticado
+
+**Blockers:**
+- Parser sem agents = não tem produto
+- Dashboard sem parser = não tem dados para mostrar
+
+---
+
+### Success Criteria by Phase
+
+#### Phase 1 (MVP)
+- ✅ Usuário consegue analisar 20+ vagas em <1 hora
+- ✅ Usuário entende quais skills aprender
+- ✅ Usuário pode fazer pair programming (se quiser)
+- ✅ ≥50% retornam em 7 dias
+
+#### Phase 2 (Growth)
+- ✅ 5-10 usuários conseguiram emprego
+- ✅ NPS ≥40 indica satisfação
+- ✅ Custo por usuário < $5/mo (open-source LLM)
+
+#### Phase 3 (Vision)
+- ✅ Recrutadores pagando por acesso
+- ✅ "DevMentor" reconhecido no mercado
+- ✅ Comunidade ativa gerando conteúdo
+
+---
+
+## Functional Requirements
+
+### 1. Gerenciamento de Vagas
+
+- FR1: Usuário pode fazer upload de descrições de vagas em arquivos .md, .txt ou através de links do LinkedIn
+- FR2: Sistema pode processar múltiplas vagas simultaneamente (até 20 vagas por batch)
+- FR3: Sistema pode armazenar histórico de vagas processadas por cada usuário
+- FR4: Usuário pode visualizar lista de vagas processadas anteriormente
+
+### 2. Análise Multi-Agentes
+
+- FR5: Sistema pode extrair todas as skills mencionadas nas vagas processadas
+- FR6: Sistema pode executar 8 agentes especializados (Parser, Researcher, Coder, Reviewer, Critic, Teacher, Documenter, Metrics)
+- FR7: Sistema pode facilitar debate protocol entre agentes para reduzir alucinações
+- FR8: Sistema pode apresentar resultados dos agentes em streaming (progressive loading)
+- FR9: Sistema pode gerar plano de estudos consolidado baseado na análise dos agentes
+- FR10: Sistema pode exibir visibilidade do debate entre agentes (para usuários sênior céticos)
+
+### 3. Auto-Avaliação & Gaps
+
+- FR11: Sistema pode gerar lista de auto-avaliação dinâmica baseada nas skills encontradas nas vagas
+- FR12: Usuário pode informar seu nível de proficiência em cada skill listada
+- FR13: Sistema pode calcular matriz de intersecção mostrando skills mais solicitadas (80%+) vs skills do usuário
+- FR14: Sistema pode apresentar radar chart visualizando evolução de skills ao longo do tempo
+
+### 4. Planos de Estudo & Portfolio
+
+- FR15: Sistema pode sugerir planos de estudos personalizados baseados nos gaps identificados
+- FR16: Sistema pode sugerir projetos de portfolio (cases) derivados de vagas reais do mercado
+- FR17: Sistema pode fornecer estratégias de portfolio baseadas em stack composition analysis
+
+### 5. Pair Programming
+
+- FR18: Usuário pode iniciar sessão de pair programming opcional
+- FR19: Sistema pode conectar usuário com agente IA para pair programming interativo
+- FR20: Sistema pode fornecer feedback em tempo real durante sessão de pair programming
+- FR21: Sistema pode avaliar performance do usuário durante pair programming (avaliação real, não auto-avaliação)
+
+### 6. Métricas & Progresso
+
+- FR22: Sistema pode apresentar dashboard visual com métricas de progresso
+- FR23: Sistema pode rastrear streaks (dias consecutivos de uso) e outras métricas de engajamento
+- FR24: Sistema pode apresentar pontos de experiência (XP) e níveis baseados em atividades completadas
+- FR25: Sistema pode coletar e apresentar métricas de learning loop da comunidade (cases de sucesso/erro)
+
+---
+
+### 7. Administração & Operações (Phase 2)
+
+- FR26: Administrador pode acessar dashboard de métricas de saúde do sistema
+- FR27: Sistema pode monitorar métricas em tempo real (usuários ativos, acurácia do parser, latência)
+- FR28: Sistema pode enviar alertas automaticamente quando métricas excedem thresholds
+- FR29: Administrador pode visualizar logs de erro e performance para troubleshooting
+- FR30: Suporte pode re-executar parser em vagas específicas para debugging
+- FR31: Administrador pode ajustar configurações do parser (ex: seções para ler, prompts)
+- FR32: Sistema pode manter histórico de sessões de usuários para contexto de suporte
+
+### 8. Comunidade & Sucesso (Phase 2)
+
+- FR33: Sistema pode documentar e apresentar cases de sucesso de usuários que conseguiram emprego
+- FR34: Usuário pode compartilhar sua experiência e resultados com a comunidade
+- FR35: Sistema pode calcular e apresentar taxa de sucesso comparada à média do mercado
 

@@ -141,7 +141,7 @@ A sequência selecionada permite:
 **M - Modificar (4 ideias):**
 
 - Portfolio ao vivo em tempo real (mostra você trabalhando AGORA)
-- Portfolio do ponto de vista do RECICRUTADOR
+- Portfolio do ponto de vista do RECRUTADOR
 - Portfolio que faz PERGUNTAS ao recrutador
 - Portfolio com VÍDEO de code reviews ao vivo
 
