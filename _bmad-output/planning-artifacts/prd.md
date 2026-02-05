@@ -15,7 +15,7 @@ classification:
   features:
     - Interface web completa e robusta
     - Dashboard de métricas, visualização dos 8 agentes, chat pair programming
-    - CLI como feature futura (v2.0+)
+    - CLI (v2.0+)
   techStack:
     - Backend: Node.js/Python
     - LLM: OpenAI/LLM local
@@ -164,8 +164,9 @@ Vaga → Parser → Agentes analisam → Plano de Estudo ─→ [OU] Pair Progra
 
 **Fluxo Completo:**
 
-1. **Input das Vagas:** Upload de 20 vagas em arquivos .md/.txt ou links do LinkedIn
-2. **Parser Inicial - TODAS as Skills:** Agentes analisam e retornam lista completa de skills encontradas
+1. **Onboarding Contextual:** Ao abrir o sistema, Julia é guiada por uma tour rápida que explica o papel dos 8 agentes e como eles colaborarão em sua carreira.
+2. **Input das Vagas:** Upload de 20 vagas em arquivos .md/.txt ou links do LinkedIn
+3. **Parser Inicial - TODAS as Skills:** Agentes analisam e retornam lista completa de skills encontradas
 3. **Auto-avaliação Dinâmica:** Lista gerada baseada nas skills encontradas nas vagas
 4. **Matriz de Intersecção:** Gap analysis mostrando skills mais solicitadas (80%+) vs o que ela sabe
 5. **Pair Programming:** Sessão para construir case sugerido (TODO app com Zustand + Vitest)
@@ -920,7 +921,7 @@ Cache Targets:
 
 ### 1. Gerenciamento de Vagas
 
-- FR1: Usuário pode fazer upload de descrições de vagas em arquivos .md, .txt ou através de links do LinkedIn
+- FR1: Usuário pode fazer upload de descrições de vagas em arquivos .md, .txt ou através de links de plataformas de recrutamento
 - FR2: Sistema pode processar múltiplas vagas simultaneamente (até 20 vagas por batch)
 - FR3: Sistema pode armazenar histórico de vagas processadas por cada usuário
 - FR4: Usuário pode visualizar lista de vagas processadas anteriormente
@@ -930,68 +931,52 @@ Cache Targets:
 - FR5: Sistema pode extrair todas as skills mencionadas nas vagas processadas
 - FR6: Sistema pode executar 8 agentes especializados (Parser, Researcher, Coder, Reviewer, Critic, Teacher, Documenter, Metrics)
 - FR7: Sistema pode facilitar debate protocol entre agentes para reduzir alucinações
-- FR8: Sistema pode apresentar resultados dos agentes em streaming (progressive loading)
-- FR9: Sistema pode gerar plano de estudos consolidado baseado na análise dos agentes
+- FR8: Sistema pode apresentar resultados dos agentes através de streaming de resposta em tempo real
+- FR9: Sistema pode gerar plano de estudos consolidado baseado na análise semântica e vetorial dos agentes
 - FR10: Sistema pode exibir visibilidade do debate entre agentes (para usuários sênior céticos)
 
 ### 3. Auto-Avaliação & Gaps
 
-- FR11: Sistema pode gerar lista de auto-avaliação dinâmica baseada nas skills encontradas nas vagas
-- FR12: Usuário pode informar seu nível de proficiência em cada skill listada
-- FR13: Sistema pode calcular matriz de intersecção mostrando skills mais solicitadas (80%+) vs skills do usuário
-- FR14: Sistema pode apresentar radar chart visualizando evolução de skills ao longo do tempo
+- FR11: Sistema guia o usuário através de um onboarding contextual explicando a função de cada agente na primeira sessão
+- FR12: Sistema pode gerar lista de auto-avaliação dinâmica baseada nas skills encontradas nas vagas
+- FR13: Usuário pode informar seu nível de proficiência em cada skill listada
+- FR14: Sistema pode calcular matriz de intersecção mostrando skills mais solicitadas (80%+) vs skills do usuário
+- FR15: Sistema pode apresentar radar chart visualizando evolução de skills ao longo do tempo
 
 ### 4. Planos de Estudo & Portfolio
 
-- FR15: Sistema pode sugerir planos de estudos personalizados baseados nos gaps identificados
-- FR16: Sistema pode sugerir projetos de portfolio (cases) derivados de vagas reais do mercado
-- FR17: Sistema pode fornecer estratégias de portfolio baseadas em stack composition analysis
+- FR16: Sistema pode sugerir planos de estudos personalizados baseados nos gaps identificados
+- FR17: Sistema pode sugerir projetos de portfolio (cases) derivados de vagas reais do mercado
+- FR18: Sistema pode fornecer estratégias de portfolio baseadas em stack composition analysis
 
 ### 5. Pair Programming
 
-- FR18: Usuário pode iniciar sessão de pair programming opcional
-- FR19: Sistema pode conectar usuário com agente IA para pair programming interativo
-- FR20: Sistema pode fornecer feedback em tempo real durante sessão de pair programming
-- FR21: Sistema pode avaliar performance do usuário durante pair programming (avaliação real, não auto-avaliação)
+- FR19: Usuário pode iniciar sessão de pair programming opcional
+- FR20: Sistema pode conectar usuário com agente IA para pair programming interativo
+- FR21: Sistema pode fornecer feedback em tempo real durante sessão de pair programming
+- FR22: Sistema pode avaliar performance do usuário durante pair programming (avaliação real, não auto-avaliação)
 
 ### 6. Métricas & Progresso
 
-- FR22: Sistema pode apresentar dashboard visual com métricas de progresso
-- FR23: Sistema pode rastrear streaks (dias consecutivos de uso) e outras métricas de engajamento
-- FR24: Sistema pode apresentar pontos de experiência (XP) e níveis baseados em atividades completadas
-- FR25: Sistema pode coletar e apresentar métricas de learning loop da comunidade (cases de sucesso/erro)
-
----
-
-### 7. Administração & Operações (Phase 2)
-
-- FR26: Administrador pode acessar dashboard de métricas de saúde do sistema
-- FR27: Sistema pode monitorar métricas em tempo real (usuários ativos, acurácia do parser, latência)
-- FR28: Sistema pode enviar alertas automaticamente quando métricas excedem thresholds
-- FR29: Administrador pode visualizar logs de erro e performance para troubleshooting
-- FR30: Suporte pode re-executar parser em vagas específicas para debugging
-- FR31: Administrador pode ajustar configurações do parser (ex: seções para ler, prompts)
-- FR32: Sistema pode manter histórico de sessões de usuários para contexto de suporte
-
-### 8. Comunidade & Sucesso (Phase 2)
-
-- FR33: Sistema pode documentar e apresentar cases de sucesso de usuários que conseguiram emprego
-- FR34: Usuário pode compartilhar sua experiência e resultados com a comunidade
-- FR35: Sistema pode calcular e apresentar taxa de sucesso comparada à média do mercado
+- FR23: Sistema pode apresentar dashboard visual com métricas de progresso
+- FR24: Sistema pode rastrear streaks (dias consecutivos de uso) e outras métricas de engajamento
+- FR25: Sistema pode apresentar pontos de experiência (XP) e níveis baseados em atividades completadas
+- FR26: Sistema pode coletar e apresentar métricas de learning loop da comunidade (cases de sucesso/erro)
+- FR35: Sistema deve consolidar dados de contratação informados pelos usuários trimestralmente e comparar com benchmarks de mercado para validar a eficácia do método
 
 ---
 
 ## Non-Functional Requirements
 
 ### 1. Performance
-- **NFR1:** Tempo de resposta do Parser (vaga única) deve ser < 500ms (p50) usando indexação HNSW.
-- **NFR2:** O primeiro resultado dos agentes deve ser transmitido (streamed) em < 1s (p50) via SSE.
+- **NFR1:** Tempo de resposta da busca semântica (vaga única) deve ser < 500ms (p50) usando mecanismo de indexação vetorial otimizado.
+- **NFR2:** O primeiro resultado dos agentes deve ser transmitido através de protocolo de streaming em tempo real em < 1s (p50).
 - **NFR3:** Core Web Vitals: LCP < 1.5s e TTI < 2s para garantir UX fluida.
 - **NFR4:** Suportar até 100 usuários simultâneos no MVP sem degradação perceptível.
 
 ### 2. Scalability
 - **NFR5:** Arquitetura deve permitir escalonamento horizontal do backend e dos workers de IA.
-- **NFR6:** pgvector deve manter latência de busca < 500ms mesmo com crescimento para 1M+ de registros de skills.
+- **NFR6:** O armazenamento vetorial deve manter latência de busca < 500ms mesmo com crescimento para 1M+ de registros de skills.
 
 ### 3. Security & Privacy
 - **NFR7:** Dados em trânsito via TLS 1.3 e em repouso via AES-256.
