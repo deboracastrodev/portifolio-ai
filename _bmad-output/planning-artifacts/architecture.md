@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2]
+stepsCompleted: [1, 2, 3]
 inputDocuments: ["_bmad-output/planning-artifacts/prd.md", "docs/ux-spec-timeline.md", "docs/brainstorming.md", "_bmad-output/planning-artifacts/research/tecnologias-rag-conhecimento-tecnico-research-2026-02-04.md"]
 workflowType: 'architecture'
 project_name: 'portifolio-ai'
@@ -57,3 +57,35 @@ Análise e processamento de vagas de emprego através de um ecossistema de 8 age
 - **Hallucination Prevention:** Implementação de "Critic Agent" com acesso a RAG de alta fidelidade e métricas de consistência entre agentes. Reforçado pela necessidade de papéis claros e design modular nos sistemas multi-agentes.
 - **Latency Optimization:** Priorização de arquitetura assíncrona com streaming SSE; paralelização de agentes e cache de embeddings em Redis. A pesquisa valida a eficiência do SSE para o streaming.
 - **Cost Management:** Roteamento inteligente de LLMs (Small Models para extração, Large Models para debate/decisão) para otimizar custos, conforme boas práticas de arquiteturas híbridas de LLM.
+
+## Starter Template Evaluation
+
+### Primary Technology Domain
+Identificado como **Web Application (Full-stack) com foco em AI**.
+
+### Selected Starters: Next.js (Frontend) e Fastify (Backend)
+
+**Rationale for Selection:**
+A combinação de `create-next-app` e um boilerplate com Fastify oferece uma base sólida, atualizada e performática, permitindo a flexibilidade necessária para a orquestração de agentes.
+
+**Initialization Commands:**
+```bash
+# Frontend (Next.js 14, TypeScript, Tailwind CSS, App Router)
+npx create-next-app@latest frontend --typescript --tailwind --app --src-dir
+
+# Backend (Node.js, Fastify, TypeScript)
+# A ser iniciado com um boilerplate minimalista.
+```
+
+## Engineering Standards & Documentation Framework
+
+### MVP of Templates
+Como parte do Epic 1, um conjunto inicial de templates será criado para estabelecer padrões:
+- **Backend CRUD Example:** Um exemplo completo (Controller, Service, Repository, Schema, Tests).
+- **Frontend CRUD Example:** Um exemplo com hooks React Query e componentes de UI.
+- **Storybook:** Configuração inicial com 5 componentes base.
+
+### Continuous Documentation Framework
+A "Definição de Done" para todas as features incluirá:
+- **Quality Checklist:** Um `CHECKLIST.md` em cada template para validar testes, schemas, segurança e padrões.
+- **Post-Feature Documentation:** Um processo de duas camadas com documentação técnica (no código, para devs) e documentação de negócio (centralizada, para o time).
