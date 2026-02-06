@@ -157,6 +157,18 @@ A "Definição de Done" para todas as features incluirá:
 
 ## Implementation Patterns & Consistency Rules
 
+### SOLID Principles Enforcement
+
+Para garantir a manutenibilidade a longo prazo, testabilidade e aderência aos princípios SOLID, todos os agentes de implementação DEVEM seguir estas diretrizes:
+
+1.  **Princípio da Responsabilidade Única (SRP):** Classes e funções devem ter apenas uma razão para mudar. Serviços na camada `core` não devem lidar diretamente com preocupações de HTTP, frameworks de UI ou acesso direto a banco de dados.
+2.  **Princípio Aberto/Fechado (OCP):** Entidades de software (classes, módulos, funções, etc.) devem ser abertas para extensão, mas fechadas para modificação. Isso será alcançado principalmente através da Arquitetura Hexagonal, permitindo a adição de novas funcionalidades sem alterar o código existente do `core`.
+3.  **Princípio da Substituição de Liskov (LSP):** Subtipos devem ser substituíveis por seus tipos base sem alterar a correção do programa. O uso de TypeScript e interfaces bem definidas, especialmente nos contratos do tRPC e na definição de `Ports` e `Adapters`, reforçará esse princípio.
+4.  **Princípio da Segregação de Interface (ISP):** Clientes não devem ser forçados a depender de interfaces que não utilizam. A separação de concerns e a criação de interfaces específicas para cada necessidade (e.g., `packages/api` para tRPC, adapters HTTP/WS específicos) promovem o ISP.
+5.  **Princípio da Inversão de Dependência (DIP) e Injeção de Dependência:**
+    *   **Inversão:** Módulos de alto nível (`core`) NÃO DEVEM depender de módulos de baixo nível (`infra`). Ambos DEVEM depender de abstrações. As abstrações (interfaces/types, ou "Ports") devem pertencer aos módulos de alto nível.
+    *   **Injeção por Construtor:** Serviços no `core` NÃO DEVEM instanciar suas próprias dependências (e.g., `new PrismaClient()` ou `new OpenAI()`). As dependências DEVEM ser passadas via construtores ou funções factory como abstrações (interfaces/types, ou "Ports"). Por exemplo, um serviço no `core` que precisa de acesso a um LLM deve receber um `ILLMService` no construtor, e a implementação concreta (`OpenAIService` ou `LLaMAService`) será fornecida pela camada de infraestrutura ou por um container de Injeção de Dependência.
+
 ### Pattern Categories Defined
 
 **Critical Conflict Points Identified:**
